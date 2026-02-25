@@ -45,11 +45,63 @@
     <section id="productos" class="my-5">
         <div class="row align-items-center">
             <div class="col-lg-4 offset-lg-2 offset-1 col-10">
-                <h2>Vamos a hablar acerca de...</h2>
+                <h2><?php echo "Vamos a hablar acerca de..."?></h2>
                 <p>Labore est aute cillum veniam voluptate sint. Duis aliqua eiusmod nulla sunt in voluptate ipsum velit laboris veniam labore. Anim laboris consequat minim proident esse culpa Lorem consequat in nulla cupidatat mollit. Nulla proident ullamco labore amet duis voluptate sint aliquip nostrud nostrud quis. Sint reprehenderit consequat do dolor. Excepteur reprehenderit esse laborum est mollit deserunt non. Ipsum enim reprehenderit magna dolor aliquip pariatur dolor officia proident Lorem magna.</p>
             </div>
             <div class="col-lg-3 offset-lg-1 offset-1 col-10">
                 <img class="img-fluid rounded" src="https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?cs=srgb&dl=pexels-souvenirpixels-417074.jpg&fm=jpg" alt="Una hermosa vista">
+            </div>
+        </div>
+    </section>
+    <section id="productos" class="bg-dark mt-5 p-5">
+        <div class="container-fluid row text-light">
+            <form method="POST" class="col-lg-4">
+                <h3>Registro de productos</h3>
+                <?php
+                    include "conn.php";
+                ?>
+                <div class="mt-4">
+                    <label for="form_nombre_producto" class="form-label">Nombre del producto</label>
+                    <input type="text" class="form-control bg-dark text-light" name="nombre_producto" require>
+                </div>
+                <div class="mt-4">
+                    <label for="form_marca_producto" class="form-label">Marca del producto</label>
+                    <input type="text" class="form-control bg-dark text-light" name="marca_producto" require>
+                </div>
+                <div class="mt-4">
+                    <label for="form_cantidad_producto" class="form-label">Cantidad del producto</label>
+                    <input type="text" class="form-control bg-dark text-light" name="cantidad_producto" require>
+                </div>
+                <button type="submit" class="btn btn-primary mt-4" name="btn_registrar" value="Formulario enviado">Registrar producto</button>
+            </form>
+            <?php
+                $query = $conn->query("select * from productos");
+            ?>
+            <div class="col-lg-8 table-responsive">
+                <table class="table table-hover table-dark">
+                    <thead>
+                        <tr>
+                            <th><b>ID</b></th>
+                            <th><b>Producto</b></th>
+                            <th><b>Marca</b></th>
+                            <th><b>Cantidad</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        
+                            while($datos = $query->fetch_object()){ ?>
+                        <tr>
+                            <td><b><?= $datos->id ?></b></td>
+                            <td><?= $datos->nombre_producto ?></td>
+                            <td><?= $datos->marca_producto ?></td>
+                            <td><?= $datos->cantidad_producto ?></td>
+                        </tr>
+                        <?php
+                            }
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>

@@ -1,3 +1,8 @@
+<?php
+
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="es-VE">
 
@@ -22,9 +27,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link active" aria-current="page" href="#">Acerca de la página</a>
-                    <a class="nav-link" href="#">Productos</a>
-                    <a class="nav-link" href="#">Contacto</a>
+                    <a class="nav-link active" aria-current="page" href="#about">Acerca de la página</a>
+                    <a class="nav-link" href="#productos">Productos</a>
+                    <a class="nav-link" href="#contacto">Contacto</a>
                 </div>
             </div>
         </div>
@@ -35,14 +40,14 @@
         <div class="container-fluid d-flex text-light align-items-center justify-content-center text-center" 
         style="background-image: url('assets/landscape_darken.jpg'); height: 100vh; background-size: cover; background-position: center;">
             <div>
-                <h1 class="titulo">Bienvenido a la página👋</h1>
+                <h1 class="titulo">Bienvenido, <?= $_SESSION["usuario"] ?>👋</h1>
                 <p class="mt-4">Ut cupidatat ad aliquip officia ex eu aliquip do proident.</p>
-                <button class="btn btn-light me-3 px-5" type="button">Iniciar Sesión</button>
-                <button class="btn btn-outline-light" type="button">Registrarse</button>
+                <a href="login.php" class="btn btn-light me-3 px-5" >Iniciar Sesión</a>
+                <a href="controller/logout_controller.php" class="btn btn-danger" type="button">Cerrar sesion</a>
             </div>
         </div>
     </section>
-    <section id="productos" class="my-5">
+    <section id="about" class="my-5">
         <div class="row align-items-center">
             <div class="col-lg-4 offset-lg-2 offset-1 col-10">
                 <h2><?php echo "Vamos a hablar acerca de..."?></h2>
@@ -58,19 +63,21 @@
             <form method="POST" class="col-lg-4">
                 <h3>Registro de productos</h3>
                 <?php
-                    include "conn.php";
+                    include "model/conn.php";
+                    include "controller/create_product_controller.php";
+                    include "controller/delete_product_controller.php";
                 ?>
                 <div class="mt-4">
                     <label for="form_nombre_producto" class="form-label">Nombre del producto</label>
-                    <input type="text" class="form-control bg-dark text-light" name="nombre_producto" require>
+                    <input type="text" class="form-control bg-dark text-light" name="nombre_producto" required>
                 </div>
                 <div class="mt-4">
                     <label for="form_marca_producto" class="form-label">Marca del producto</label>
-                    <input type="text" class="form-control bg-dark text-light" name="marca_producto" require>
+                    <input type="text" class="form-control bg-dark text-light" name="marca_producto" required>
                 </div>
                 <div class="mt-4">
                     <label for="form_cantidad_producto" class="form-label">Cantidad del producto</label>
-                    <input type="text" class="form-control bg-dark text-light" name="cantidad_producto" require>
+                    <input type="text" class="form-control bg-dark text-light" name="cantidad_producto" required>
                 </div>
                 <button type="submit" class="btn btn-primary mt-4" name="btn_registrar" value="Formulario enviado">Registrar producto</button>
             </form>
@@ -85,6 +92,12 @@
                             <th><b>Producto</b></th>
                             <th><b>Marca</b></th>
                             <th><b>Cantidad</b></th>
+                            <?php 
+                                if($_SESSION["admin"] == 1){
+                                    echo "<th colspan='2'><b>Acciones</b></th>";
+                                }
+                            ?>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -96,6 +109,12 @@
                             <td><?= $datos->nombre_producto ?></td>
                             <td><?= $datos->marca_producto ?></td>
                             <td><?= $datos->cantidad_producto ?></td>
+                            <?php
+                                if($_SESSION["admin"] == 1){
+                                    echo "<td><a href='edit_index.php?id=$datos->id' class='btn btn-warning'><i class='fa-solid fa-pen'></i></a></td>";
+                                    echo "<td><a onclick='return confirm(\" Deseas borrar este producto? \")' href='index.php?id=$datos->id' class='btn btn-danger'><i class='fa-solid fa-trash'></i></a></td>";
+                                }
+                            ?>
                         </tr>
                         <?php
                             }
@@ -106,7 +125,7 @@
         </div>
     </section>
 </body>
-<footer class="bg-dark py-4 text-light">
+<footer class="bg-dark py-4 text-light" id="contacto">
     <div class="container-fluid">
         <div class="row">
             <!-- titulo -->
